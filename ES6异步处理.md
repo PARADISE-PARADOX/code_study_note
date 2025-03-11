@@ -41,23 +41,36 @@ const p1 = new Promise((resolve, reject) => {
 
 ```javascript
 const p1 = new Promise((resolve, reject) => {
-  resolve("1111111成功");
-  //   reject("1111111失败");
+  // resolve("1111111成功");
+  reject("1111111失败");
 })
-  .then((data) => {
-    console.log(data);
-    console.log("调用第一个then");
-    return new Promise((resolve, reject) => {
-      resolve("2222222成功");
-    });
-  })
-  .then((data) => {
-    console.log(data);
-    console.log("调用第二个then");
-    return new Promise((resolve, reject) => {
-      resolve("3333333成功");
-    });
-  })
+  .then(
+    (data) => {
+      console.log(data);
+      console.log("调用第一个then");
+      return new Promise((resolve, reject) => {
+        resolve("2222222成功");
+      });
+    },
+    (error) => {
+      console.log(error);
+      console.log("222222失败");
+      throw new Error("222222失败");
+    }
+  )
+  .then(
+    (data) => {
+      console.log(data);
+      console.log("调用第二个then");
+      return new Promise((resolve, reject) => {
+        resolve("3333333成功");
+      });
+    },
+    (error) => {
+      // 这里需要将错误处理回调函数放在then的第二个参数位置
+      throw new Error("333333失败");
+    }
+  )
   .then((data) => {
     console.log(data);
     console.log("调用第三个then");
@@ -69,6 +82,7 @@ const p1 = new Promise((resolve, reject) => {
   .finally(() => {
     console.log("无论成功还是失败，调用finally");
   });
+
 
 ```
 
